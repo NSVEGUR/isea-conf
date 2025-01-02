@@ -16,6 +16,7 @@ import {
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -24,6 +25,7 @@ import { Menu } from "lucide-react";
 import { siteConfig } from "@/lib/config/site";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { ScrollArea } from "../ui/scroll-area";
 
 export function SiteHeader() {
   return (
@@ -37,7 +39,7 @@ export function SiteHeader() {
 function DesktopHeader() {
   const pathname = usePathname();
   return (
-    <header className="w-full border-b pb-1 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:flex hidden">
+    <header className="w-full border-b pb-1 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 lg:flex hidden">
       <div className="container mx-auto flex flex-col items-center justify-center">
         <div className="flex items-center justify-center text-center py-5 gap-5">
           <Image
@@ -119,53 +121,84 @@ function DesktopHeader() {
 
 function MobileHeader() {
   return (
-    <header className="w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex md:hidden">
+    <header className="w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex items-center justify-between px-2 py-4 lg:hidden">
+      <div className="flex items-center gap-2">
+        <Image
+          src="/isea.png"
+          width={50}
+          height={50}
+          alt="ISEA-ISAP 2025"
+          className="mt-2"
+        />
+        <div>
+          <h1 className="font-bold text-lg">{siteConfig.title}</h1>
+          <h3 className="text-xs sm:text-sm text-muted-foreground">
+            {siteConfig.description}
+          </h3>
+        </div>
+      </div>
       <Sheet>
         <SheetTrigger asChild>
           <Button
             variant="ghost"
-            className="px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+            className="px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
           >
             <Menu className="h-6 w-6" />
             <span className="sr-only">Toggle Menu</span>
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="pr-0">
-          <SheetHeader>
-            <SheetTitle className="text-left">{siteConfig.title}</SheetTitle>
-          </SheetHeader>
-          <div className="flex flex-col space-y-3 mt-4">
-            {siteConfig.navigation.map((item) => {
-              if (item.href) {
+          <ScrollArea className="h-[calc(100vh-theme(spacing.12))]">
+            <SheetHeader className="flex flex-row gap-2 items-center text-left">
+              <Image
+                src="/isea.png"
+                width={50}
+                height={50}
+                alt="ISEA-ISAP 2025"
+                className="mt-4"
+              />
+              <div>
+                <SheetTitle className="font-bold text-lg">
+                  {siteConfig.title}
+                </SheetTitle>
+                <SheetDescription className="text-xs sm:text-sm text-muted-foreground">
+                  {siteConfig.description}
+                </SheetDescription>
+              </div>
+            </SheetHeader>
+            <div className="flex flex-col space-y-3 mt-4">
+              {siteConfig.navigation.map((item) => {
+                if (item.href) {
+                  return (
+                    <Link
+                      key={item.title}
+                      href={item.href}
+                      className="block py-2 text-sm font-medium"
+                    >
+                      {item.title}
+                    </Link>
+                  );
+                }
+                if (!item.children) return null;
                 return (
-                  <Link
-                    key={item.title}
-                    href={item.href}
-                    className="block py-2 text-sm font-medium"
-                  >
-                    {item.title}
-                  </Link>
-                );
-              }
-              if (!item.children) return null;
-              return (
-                <div key={item.title} className="space-y-3">
-                  <div className="font-medium">{item.title}</div>
-                  <div className="pl-4 space-y-3">
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.title}
-                        href={child.href}
-                        className="block py-2 text-sm"
-                      >
-                        {child.title}
-                      </Link>
-                    ))}
+                  <div key={item.title} className="space-y-3">
+                    <div className="font-medium">{item.title}</div>
+                    <div className="pl-4 space-y-3">
+                      {item.children.map((child) => (
+                        <Link
+                          key={child.title}
+                          href={child.href}
+                          className="block py-2 text-sm"
+                        >
+                          {child.title}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          </ScrollArea>
         </SheetContent>
       </Sheet>
     </header>

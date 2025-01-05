@@ -39,83 +39,89 @@ export function SiteHeader() {
 function DesktopHeader() {
   const pathname = usePathname();
   return (
-    <header className="w-full border-b pb-1 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 lg:flex hidden">
-      <div className="container mx-auto flex flex-col items-center justify-center">
-        <div className="flex items-center justify-center text-center py-5 gap-5">
-          <Image
-            src="/isea.png"
-            width={90}
-            height={90}
-            alt="ISEA-ISAP 2025"
-            className="mt-4"
-          />
-          <div className="space-y-2">
-            <h1 className="font-bold text-2xl">{siteConfig.title}</h1>
-            <h3 className="font-semibold text-lg text-muted-foreground">
-              {siteConfig.description}
-            </h3>
-            <p className="font-semibold text-muted-foreground">
-              27 February - 1 March 2025, IIT Madras, Chennai, Tamil Nadu
-            </p>
+    <>
+      <header className="w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 lg:flex hidden">
+        <div className="container mx-auto flex flex-col items-center justify-center">
+          <div className="flex items-center justify-center text-center py-5 gap-5">
+            <Image
+              src="/isea.png"
+              width={90}
+              height={90}
+              alt="ISEA-ISAP 2025"
+              className="mt-4"
+            />
+            <div className="space-y-2">
+              <h1 className="font-bold text-2xl">{siteConfig.title}</h1>
+              <h3 className="font-semibold text-lg text-muted-foreground">
+                {siteConfig.description}
+              </h3>
+              <p className="font-semibold text-muted-foreground">
+                27 February - 1 March 2025, IIT Madras, Chennai, Tamil Nadu
+              </p>
+            </div>
+            <Image src="/iitm.png" width={90} height={90} alt="IIT Madras" />
           </div>
-          <Image src="/iitm.png" width={90} height={90} alt="IIT Madras" />
         </div>
-        <NavigationMenu>
-          <NavigationMenuList>
-            {siteConfig.navigation.map((item) => {
-              if (item.href) {
+      </header>
+      <nav className="sticky top-2 z-10 lg:flex hidden items-center justify-center">
+        <div className="p-2 border rounded-lg bg-background">
+          <NavigationMenu>
+            <NavigationMenuList>
+              {siteConfig.navigation.map((item) => {
+                if (item.href) {
+                  return (
+                    <NavigationMenuItem key={item.title}>
+                      <Link href={item.href} legacyBehavior passHref>
+                        <NavigationMenuLink
+                          className={cn(
+                            navigationMenuTriggerStyle(),
+                            pathname === item.href &&
+                              "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
+                          )}
+                        >
+                          {item.title}
+                        </NavigationMenuLink>
+                      </Link>
+                    </NavigationMenuItem>
+                  );
+                }
+                if (!item.children) return null;
                 return (
                   <NavigationMenuItem key={item.title}>
-                    <Link href={item.href} legacyBehavior passHref>
-                      <NavigationMenuLink
+                    <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <ul
                         className={cn(
-                          navigationMenuTriggerStyle(),
-                          pathname === item.href &&
-                            "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
+                          "grid gap-1 p-2",
+                          item.children.length > 4
+                            ? "grid-cols-2 w-[500px]"
+                            : "w-[250px]"
                         )}
                       >
-                        {item.title}
-                      </NavigationMenuLink>
-                    </Link>
+                        {item.children.map((child) => (
+                          <li key={child.title}>
+                            <NavigationMenuLink asChild>
+                              <Link
+                                href={child.href}
+                                className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                              >
+                                <div className="text-sm font-medium leading-none">
+                                  {child.title}
+                                </div>
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                        ))}
+                      </ul>
+                    </NavigationMenuContent>
                   </NavigationMenuItem>
                 );
-              }
-              if (!item.children) return null;
-              return (
-                <NavigationMenuItem key={item.title}>
-                  <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul
-                      className={cn(
-                        "grid gap-1 p-2",
-                        item.children.length > 4
-                          ? "grid-cols-2 w-[500px]"
-                          : "w-[250px]"
-                      )}
-                    >
-                      {item.children.map((child) => (
-                        <li key={child.title}>
-                          <NavigationMenuLink asChild>
-                            <Link
-                              href={child.href}
-                              className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                            >
-                              <div className="text-sm font-medium leading-none">
-                                {child.title}
-                              </div>
-                            </Link>
-                          </NavigationMenuLink>
-                        </li>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              );
-            })}
-          </NavigationMenuList>
-        </NavigationMenu>
-      </div>
-    </header>
+              })}
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
+      </nav>
+    </>
   );
 }
 

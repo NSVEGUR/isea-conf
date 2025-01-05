@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/config/site";
 import { SiteHeader } from "@/components/marginals/site-header";
+import { SiteFooter } from "@/components/marginals/site-footer";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,10 +29,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased relative`}
       >
-        <SiteHeader />
-        {children}
+        <ScrollArea className="h-screen w-screen">
+          <SiteHeader />
+          {children}
+          <SiteFooter />
+        </ScrollArea>
       </body>
     </html>
   );

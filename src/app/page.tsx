@@ -1,11 +1,19 @@
 import { Button } from "@/components/ui/button";
+import { siteConfig } from "@/lib/config/site";
 import { Calendar, MapPin, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
+import { Shell } from "@/components/shell";
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: siteConfig.title,
+  description: siteConfig.description,
+};
+
+export default function Page() {
   return (
-    <main className="container mx-auto">
+    <Shell>
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-b from-black/5 via-background to-background">
         <div className="container px-4 md:px-6 flex flex-col items-center space-y-4 text-center pt-12 md:pt-24 lg:pt-32 pb-8">
@@ -163,6 +171,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </main>
+    </Shell>
   );
 }

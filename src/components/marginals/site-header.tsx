@@ -63,7 +63,7 @@ function DesktopHeader() {
           </div>
         </div>
       </header>
-      <nav className="sticky top-2 z-10 lg:flex hidden items-center justify-center">
+      <nav className="sticky top-2 z-30 lg:flex hidden items-center justify-center">
         <div className="p-2 border rounded-lg bg-background">
           <NavigationMenu>
             <NavigationMenuList>
@@ -75,8 +75,10 @@ function DesktopHeader() {
                         <NavigationMenuLink
                           className={cn(
                             navigationMenuTriggerStyle(),
-                            pathname === item.href &&
-                              "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
+                            "font-semibold",
+                            pathname === item.href
+                              ? "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
+                              : "text-muted-foreground"
                           )}
                         >
                           {item.title}
@@ -86,9 +88,22 @@ function DesktopHeader() {
                   );
                 }
                 if (!item.children) return null;
+                const active = item.children.some(
+                  (child) => child.href === pathname
+                );
                 return (
                   <NavigationMenuItem key={item.title}>
-                    <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
+                    <NavigationMenuTrigger
+                      className={cn(
+                        navigationMenuTriggerStyle(),
+                        "font-semibold",
+                        active
+                          ? "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
+                          : "text-muted-foreground"
+                      )}
+                    >
+                      {item.title}
+                    </NavigationMenuTrigger>
                     <NavigationMenuContent>
                       <ul
                         className={cn(
@@ -136,12 +151,7 @@ function MobileHeader() {
           alt="ISEA-ISAP 2025"
           className="mt-2"
         />
-        <div>
-          <h1 className="font-bold text-lg">{siteConfig.title}</h1>
-          <h3 className="text-xs sm:text-sm text-muted-foreground">
-            {siteConfig.description}
-          </h3>
-        </div>
+        <h1 className="font-bold text-lg">{siteConfig.title}</h1>
       </div>
       <Sheet>
         <SheetTrigger asChild>
@@ -155,14 +165,22 @@ function MobileHeader() {
         </SheetTrigger>
         <SheetContent side="left" className="pr-0">
           <ScrollArea className="h-[calc(100vh-theme(spacing.12))]">
-            <SheetHeader className="flex flex-row gap-2 items-center text-left">
-              <Image
-                src="/isea.png"
-                width={50}
-                height={50}
-                alt="ISEA-ISAP 2025"
-                className="mt-4"
-              />
+            <SheetHeader className="flex flex-col gap-2 items-start text-left border-b pb-4">
+              <div className="flex items-center gap-10">
+                <Image
+                  src="/isea.png"
+                  width={50}
+                  height={50}
+                  alt="ISEA-ISAP 2025"
+                  className="mt-2"
+                />
+                <Image
+                  src="/iitm.png"
+                  width={50}
+                  height={50}
+                  alt="IIT Madras"
+                />
+              </div>
               <div>
                 <SheetTitle className="font-bold text-lg">
                   {siteConfig.title}

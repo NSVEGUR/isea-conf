@@ -3,7 +3,7 @@ export const siteConfig = {
   description:
     "Fourth ISEA International Conference on Security and Privacy 2025",
   copyright: 2025,
-  url: "",
+  url: "https://isea-conf.vercel.app",
   links: {
     twitter: "",
     company: "",
